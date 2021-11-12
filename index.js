@@ -23,6 +23,7 @@ async function run() {
         const orderCollection = database.collection('orders');
         const usersCollection = database.collection('users');
         const userRatings = database.collection('ratings')
+
         //Get api
         app.get('/cars', async (req, res) => {
             const cars = await carsCollection.find({}).toArray();
@@ -33,7 +34,6 @@ async function run() {
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const car = await carsCollection.findOne(query);
-            console.log(car)
             res.json(car);
         })
         //post api single place order
@@ -46,7 +46,6 @@ async function run() {
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
-            console.log(result);
             res.json(result);
         })
          //update api for users from client site
@@ -89,7 +88,15 @@ async function run() {
         const id = req.params.id;
         const query = {_id: ObjectId(id)};
         const result = await orderCollection.deleteOne(query);
-        res.send(result)
+        res.json(result)
+        
+    })
+        //DELETE API 
+     app.delete('/deleteProduct/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = {_id: ObjectId(id)};
+        const result = await carsCollection.deleteOne(query);
+        res.json(result)
         
     })
     //UPDATE SINGLE PRODUCT
@@ -118,7 +125,6 @@ async function run() {
         const query = {email: email};
         const result = await orderCollection.find(query).toArray();
         res.json(result);
-        console.log(result)
     })
     //user ratings api
     app.post('/addRatings', async(req, res)=>{
